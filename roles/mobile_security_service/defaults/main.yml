@@ -1,0 +1,20 @@
+mobile_security_service_name: "mobile-security-service-operator"
+mobile_security_service_namespace: "{{ eval_mobile_security_service_namespace | default(mobile_security_service_name) }}"
+mobile_security_service_display_name: "Mobile Security Service"
+
+mobile_security_service_operator_resource_items:
+  - "{{ mobile_security_service_operator_resources }}/crds/mobile-security-service_v1alpha1_mobilesecurityservice_crd.yaml"
+  - "{{ mobile_security_service_operator_resources }}/crds/mobile-security-service_v1alpha1_mobilesecurityservicedb_crd.yaml"
+  - "{{ mobile_security_service_operator_resources }}/crds/mobile-security-service_v1alpha1_mobilesecurityserviceapp_crd.yaml"
+  - "{{ mobile_security_service_operator_resources }}/crds/mobile-security-service_v1alpha1_mobilesecurityserviceunbind_crd.yaml"
+  - "{{ mobile_security_service_operator_resources }}/cluster_role.yaml"
+  - "{{ mobile_security_service_operator_resources }}/cluster_role_binding.yaml"
+  - "{{ mobile_security_service_operator_resources }}/role.yaml"
+  - "{{ mobile_security_service_operator_resources }}/role_binding.yaml"
+  - "{{ mobile_security_service_operator_resources }}/service_account.yaml"
+  - "{{ mobile_security_service_operator_resources }}/operator.yaml"
+
+mobile_security_service_database_name: "mobile_security_service"
+mobile_security_service_database_password: "postgres"
+mobile_security_service_database_user: "postgresql"
+mobile_security_service_database_host: "mobile-security-service-db"
