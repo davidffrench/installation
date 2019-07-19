@@ -2,7 +2,7 @@ apiVersion: monitoring.coreos.com/v1
 kind: PrometheusRule
 metadata:
   labels:
-    monitoring-key: middleware
+    monitoring-key: "{{monitoring_label_value}}"
   name: ksm-alerts
 spec:
   groups:
@@ -148,3 +148,36 @@ spec:
         for: 5m
         labels:
           severity: critical
+    - name: rhsso.rules
+      rules:
+        - alert: RHSSOAdminUINotAvailable
+          annotations:
+            message: >-
+              RH SSO admin UI in namespace {{ $labels.namespace }} is not
+              available for the last 5 minutes.
+          expr: >
+            (1 - absent(kube_pod_status_ready{namespace="sso", condition="true"}
+            * on (pod) group_left (label_deploymentConfig)
+            kube_pod_labels{label_deploymentConfig="sso"}) or
+            kube_pod_status_ready{namespace="sso", condition="true"} * on (pod)
+            group_left (label_deploymentConfig)
+            kube_pod_labels{label_deploymentConfig="sso"}) == 0 or
+            probe_success{service="rhsso-ui"} == 0 
+          for: 5m
+          labels:
+            severity: critical
+        - alert: RHSSODatabaseNotAvailable
+          annotations:
+            message: >-
+              RH SSO database in namespace {{ $labels.namespace }} is not
+              available for the last 5 minutes.
+          expr: >
+            (1 - absent(kube_pod_status_ready{namespace="sso", condition="true"}
+            * on (pod) group_left (label_deploymentConfig)
+            kube_pod_labels{label_deploymentConfig="sso-postgresql"}) or
+            kube_pod_status_ready{namespace="sso", condition="true"} * on (pod)
+            group_left (label_deploymentConfig)
+            kube_pod_labels{label_deploymentConfig="sso-postgresql"}) == 0 
+          for: 5m
+          labels:
+            severity: critical
